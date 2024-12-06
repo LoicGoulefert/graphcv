@@ -12,8 +12,13 @@ class BaseNode:
         raise NotImplementedError()
 
 
+class ImageInputNode(BaseNode):
+    def __init__(self, label):
+        pass
+
+
 class ThresholdNode(BaseNode):
-    def __init__(self, label="Threshold", parameters=None):
+    def __init__(self, label="Threshold"):
         default_parameters = {
             "threshold": {
                 "value": 128,
@@ -29,7 +34,7 @@ class ThresholdNode(BaseNode):
             },
             "threshold_type": {
                 "value": "BINARY",
-                "type": "combo",
+                "type": "enum",
                 "options": [
                     "BINARY",
                     "BINARY_INV",
@@ -37,6 +42,35 @@ class ThresholdNode(BaseNode):
                     "TOZERO",
                     "TOZERO_INV",
                 ],
+            },
+            "otsu": {"value": False, "type": "bool"},
+        }
+        inputs = ["Grayscale image"]
+        outputs = ["Th image"]
+
+        super().__init__(
+            label,
+            inputs=inputs,
+            outputs=outputs,
+            parameters=default_parameters,
+        )
+
+
+class AdaptativeThresholdNode(BaseNode):
+    def __init__(self, label="Adaptative Threshold"):
+        default_parameters = {
+            "method": {
+                "value": "MEAN",
+                "type": "enum",
+                "options": ["MEAN", "GAUSSIAN"],
+            },
+            "blockSize": {
+                "value": 5,
+                "type": "int",
+            },
+            "C": {
+                "value": 2,
+                "type": "int",
             },
         }
         inputs = ["Grayscale image"]

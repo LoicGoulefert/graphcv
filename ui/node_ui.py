@@ -35,21 +35,42 @@ class NodeItem:
                 ):
                     match param_options["type"]:
                         case "int":
-                            dpg.add_slider_int(
-                                label=param_name,
-                                default_value=param_options["value"],
-                                callback=self.update_parameter,
-                                user_data=param_name,
-                                min_value=param_options.get("min_value", None),
-                                max_value=param_options.get("max_value", None),
-                                width=width,
-                            )
-                        case "combo":
+                            if (
+                                "min_value" in param_options
+                                and "max_value" in param_options
+                            ):
+                                dpg.add_slider_int(
+                                    label=param_name,
+                                    default_value=param_options["value"],
+                                    callback=self.update_parameter,
+                                    user_data=param_name,
+                                    min_value=param_options.get(
+                                        "min_value", None
+                                    ),
+                                    max_value=param_options.get(
+                                        "max_value", None
+                                    ),
+                                    width=width,
+                                )
+                            else:
+                                dpg.add_input_int(
+                                    label=param_name,
+                                    default_value=param_options["value"],
+                                    callback=self.update_parameter,
+                                    user_data=param_name,
+                                    width=width,
+                                )
+                        case "enum":
                             dpg.add_combo(
                                 label=param_name,
                                 default_value=param_options["value"],
                                 items=param_options["options"],
                                 width=width,
+                            )
+                        case "bool":
+                            dpg.add_checkbox(
+                                label=param_name,
+                                default_value=param_options["value"],
                             )
                         case _:
                             pass

@@ -1,6 +1,6 @@
 import dearpygui.dearpygui as dpg
 
-from core.nodes import ThresholdNode
+from core.nodes import AdaptativeThresholdNode, ThresholdNode
 
 from .node_ui import NodeItem
 
@@ -17,8 +17,16 @@ class Editor:
                 dpg.add_menu_item(
                     label="Threshold", tag="Threshold", callback=self.add_node
                 )
+                dpg.add_menu_item(
+                    label="Adaptative Threshold",
+                    tag="Adaptative Threshold",
+                    callback=self.add_node,
+                )
 
-        with dpg.window(label="GraphCV", width=1200, height=800):
+        with dpg.window(
+            label="GraphCV",
+            tag="Primary window",
+        ):
             with dpg.node_editor(label="Node Editor", tag="Node Editor"):
                 pass
 
@@ -28,5 +36,7 @@ class Editor:
             case "Threshold":
                 node = ThresholdNode()
                 NodeItem(node)
+            case "Adaptative Threshold":
+                NodeItem(AdaptativeThresholdNode())
             case _:
                 print(f"{sender=}")
